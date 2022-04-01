@@ -18,40 +18,74 @@ public class A1GameManager : MonoBehaviour
     [SerializeField] Text textHastighetX;
     [SerializeField] Text textHastighetY;
 
-    private bool ballActive;
-    float xPosition;
-    float yPosition;
-    float hastighet;
-    float vinkel;
 
+    private bool ballActive;
+    private float xPosition;
+    private float yPosition;
+    private float startHastighet;
+    private float vinkel;
+    private float gravitation;
+    private float timeStart;
+    private float Vx;
+    private float Vy;
     void Start()
     {
         ballActive = false;
+        gravitation = -9.82f;
+        timeStart = 0;
+        boll.GetComponent<TrailRenderer>().enabled = false;
     }
 
     void Update()
     {
         if (ballActive)
         {
+            UpdatePosition();
+            UpdateUi();
 
 
-
-
-            if(yPosition <= 0)
+            if (boll.transform.position.y <= 0)
             {
                 ballActive = false;
+                boll.GetComponent<TrailRenderer>().enabled = false;
             }
         }
     }
 
-    public void ButtonPressed()
+    private void UpdatePosition()
+    {
+        //Vx = vx0 + ax*t = V * cos(x) 
+        //Vy = Vy0 + ay*t = V * sin(y) + ay * t
+        Vx = startHastighet * Mathf.Cos(Mathf.Deg2Rad * vinkel);
+        Vy = startHastighet * Mathf.Sin(Mathf.Deg2Rad * vinkel) + gravitation * (Time.realtimeSinceStartup - timeStart);
+
+        boll.transform.position = boll.transform.position + new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime);
+
+    }
+    private void UpdateUi()
+    {
+        textHastighetX.text = "Hastighet i X led: " + Vx.ToString() + " m/s";
+        textHastighetY.text = "Hastighet i Y led: " + Vy.ToString() + " m/s";
+        textXPosition.text = "X: " + boll.transform.position.x.ToString();
+        textYPosition.text = "Y: " + boll.transform.position.y.ToString();
+    }
+
+    public void StartPressed()
     {
         ballActive = true;
         xPosition = float.Parse(inputX.text);
-        xPosition = float.Parse(inputY.text);
-        hastighet = float.Parse(inputHastighet.text);
+        yPosition = float.Parse(inputY.text);
+        startHastighet = float.Parse(inputHastighet.text);
         vinkel = float.Parse(inputVinkel.text);
+        boll.transform.position = new Vector3(xPosition, yPosition);
+        timeStart = Time.realtimeSinceStartup;
+        boll.GetComponent<TrailRenderer>().enabled = true;
+    }
 
-        boll.transform.position = new Vector3(xPosition, yPosition);   
+    public void ResetPressed()
+    {
+        ballActive = false;
+        boll.transform.position = Vector3.zero;
+        
     }
 }
