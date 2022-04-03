@@ -31,7 +31,7 @@ public class CarScript
         this.speed = speed;
         SetMaxSpeed();
 
-        if(speed > maxSpeed)
+        if(speed > maxSpeed) 
         {
             isOnRoad = false;
         }
@@ -41,25 +41,19 @@ public class CarScript
 
     private void SetMaxSpeed()
     {
-        //Maximum speed that the car have in the turn
+        /*Maximum speed that the car can have in the turn without slipping
+        * maxv = square(r*f*g)
+        *
+        */
         maxSpeed = Mathf.Sqrt(radius * friction * gravitation); 
     }
 
-
-    public float GetDistTraveled()
+    public void StartCar(float radius)
     {
-        return distanceTraveled;
-    }
-
-    public float GetDistToTravel()
-    {
-        return 0;
+        this.radius = radius;
+        isOnRoad = true;
+        running = true;
     }
 
     
-
-    private void reset()
-    {
-        isOnRoad = true;
-    }
 }
