@@ -59,8 +59,10 @@ public class A1GameManager : MonoBehaviour
         Vx = startHastighet * Mathf.Cos(Mathf.Deg2Rad * vinkel);
         Vy = startHastighet * Mathf.Sin(Mathf.Deg2Rad * vinkel) + gravitation * (Time.realtimeSinceStartup - timeStart);
 
-        boll.transform.position = boll.transform.position + new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime);
+        //boll.transform.position = boll.transform.position + new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime); 
 
+        //Fysiskt korrekt (inkluderar acceleration i formeln för positionsändring i Y-led.)
+        boll.transform.position += new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime + 0.5f * (gravitation * Mathf.Pow(Time.deltaTime, 2)));
     }
     private void UpdateUi()
     {
