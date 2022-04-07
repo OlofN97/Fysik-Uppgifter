@@ -24,6 +24,8 @@ public class Box3 : MonoBehaviour
     float force_gravity;
     float force_friction;
     float angle;
+    float elapsedTime;
+    float startTime;
 
     int N = 101;
 
@@ -40,29 +42,59 @@ public class Box3 : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    //void Update()
+    //{
+    //    if (moving)
+    //    {
+    //        for (int i = 0; i < N; i++)
+    //        {
+    //            time[i] = i * delta; //time.deltaTime? Fråga imorgon på lektion
+    //            if (i == 0)
+    //            {
+    //                velocity[i] = start_velocity;
+    //                y[i] = 0;
+    //                z[i] = 0;
+    //            }
+    //            else
+    //            {
+    //                velocity[i] = velocity[i - 1] + acceleration * Time.deltaTime;
+    //                z[i] = z[i - 1] + 0.5f * (velocity[i - 1] + velocity[i]) * Time.deltaTime * Mathf.Sin(angle);
+    //                y[i] = y[i - 1] + 0.5f * (velocity[i - 1] * +velocity[i]) * Time.deltaTime * Mathf.Cos(angle);
+
+    //                Debug.Log(gameObject.transform.position);
+    //            }
+    //            gameObject.transform.position += new Vector3(0, -y[i], z[i]);
+    //        }
+    //    }
+    //}
+
+    private void FixedUpdate()
     {
         if (moving)
         {
-            for (int i = 0; i < N; i++)
-            {
-                time[i] = i * delta; //time.deltaTime? Fråga imorgon på lektion
-                if (i == 0)
-                {
-                    velocity[i] = start_velocity;
-                    y[i] = 0;
-                    z[i] = 0;
-                }
-                else
-                {
-                    velocity[i] = velocity[i - 1] + acceleration * Time.deltaTime;
-                    z[i] = z[i - 1] + 0.5f * (velocity[i - 1] + velocity[i]) * Time.deltaTime * Mathf.Sin(angle);
-                    y[i] = y[i - 1] + 0.5f * (velocity[i - 1] * +velocity[i]) * Time.deltaTime * Mathf.Cos(angle);
+            float gravity = 9.82f;
+            float frictionForce = Mathf.Cos(angle) * gravity * friction_coefficient;
+            float gravityForce = Mathf.Sin(angle) * gravity;
+            float deltaTime = 0.02f; //FixedUpdate updates 0,02 second
+            float accelerationnew = gravityForce - frictionForce; //we remove weight since its exists on both sides on the division for newtons second law.
 
-                    Debug.Log(gameObject.transform.position);
-                }
-                gameObject.transform.position += new Vector3(0, -y[i], z[i]);
+            float velocitynew = start_velocity;
+
+            for (int i = 0; i < (elapsedTime - startTime)/ deltaTime; i++)
+            {               
+                velocitynew = velocitynew + accelerationnew * deltaTime;
             }
+            if(velocitynew < 0) //if acceleration is negative the box shouldn't start accelerating backwards.
+            {
+                accelerationnew = 0;
+                velocitynew = 0;
+            }
+
+            float yMovement = velocitynew * Mathf.Sin(angle) * deltaTime;
+            float  zMovement = velocitynew * Mathf.Cos(angle) * deltaTime;
+            gameObject.transform.position += new Vector3(0, -yMovement, zMovement); 
+
+            elapsedTime += Time.deltaTime;
         }
     }
 
@@ -79,6 +111,10 @@ public class Box3 : MonoBehaviour
             acceleration = 9.82f * (Mathf.Sin(angle) - friction_coefficient * Mathf.Cos(angle));
             //if (acceleration < 0)
             //    acceleration = 0;
+
+
+            startTime = Time.realtimeSinceStartup;
+            elapsedTime = Time.realtimeSinceStartup;
             moving = true;
         }
     }
