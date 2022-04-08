@@ -8,6 +8,8 @@ public class Box3 : MonoBehaviour
 {
     public InputField field_friction;
     public InputField field_startvel;
+    public float velocitynew;
+    public float accelerationnew;
 
     float friction_coefficient;
 
@@ -76,9 +78,9 @@ public class Box3 : MonoBehaviour
             float frictionForce = Mathf.Cos(angle) * gravity * friction_coefficient;
             float gravityForce = Mathf.Sin(angle) * gravity;
             float deltaTime = 0.02f; //FixedUpdate updates 0,02 second
-            float accelerationnew = gravityForce - frictionForce; //we remove weight since its exists on both sides on the division for newtons second law.
+            accelerationnew = gravityForce - frictionForce; //we remove weight since its exists on both sides on the division for newtons second law.
 
-            float velocitynew = start_velocity;
+            velocitynew = start_velocity;
 
             for (int i = 0; i < (elapsedTime - startTime)/ deltaTime; i++)
             {               
