@@ -72,6 +72,7 @@ public class Box : MonoBehaviour
             if (input < 0)
                 Debug.Log("Input cannot be a negative number. Please insert a positive number or zero.");
         }
+        Debug.Log("a");
     }
 
     public void ResetScene()
