@@ -54,15 +54,17 @@ public class A1GameManager : MonoBehaviour
 
     private void UpdatePosition()
     {
+        float t = Time.realtimeSinceStartup - timeStart;
+        float dt = Time.deltaTime;
         //Vx = vx0 + ax*t = V * cos(x) 
         //Vy = Vy0 + ay*t = V * sin(y) + ay * t
         Vx = startHastighet * Mathf.Cos(Mathf.Deg2Rad * vinkel);
-        Vy = startHastighet * Mathf.Sin(Mathf.Deg2Rad * vinkel) + gravitation * (Time.realtimeSinceStartup - timeStart);
+        Vy = startHastighet * Mathf.Sin(Mathf.Deg2Rad * vinkel) + gravitation * t;
 
         //boll.transform.position = boll.transform.position + new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime); 
 
         //Fysiskt korrekt (inkluderar acceleration i formeln för positionsändring i Y-led.)
-        boll.transform.position += new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime + 0.5f * (gravitation * Mathf.Pow(Time.deltaTime, 2)));
+        boll.transform.position += new Vector3(Vx * dt, Vy * dt + 0.5f * (gravitation * dt*dt));
     }
     private void UpdateUi()
     {
