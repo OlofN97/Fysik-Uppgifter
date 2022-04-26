@@ -29,8 +29,7 @@ public class A2Ball : MonoBehaviour
 
     void Start()
     {
-        vx = startHastighet * (Mathf.Cos(Mathf.Deg2Rad * vinkel));
-        vy = startHastighet * (Mathf.Sin(Mathf.Deg2Rad * vinkel));
+        
 
 
         ballActive = false;
@@ -56,14 +55,14 @@ public class A2Ball : MonoBehaviour
         float dt = Time.deltaTime;
         //vx = startHastighet * Mathf.Cos(Mathf.Deg2Rad * vinkel) * xdir;
         //vy = (startHastighet * Mathf.Sin(Mathf.Deg2Rad * vinkel) + gravitation * t)*ydir;
-        vx *= xdir;
-        vy *= ydir;
-        vy -= gravitation * Time.deltaTime;
+        //vx *= xdir;
+        //vy *= ydir;
+        vy += gravitation * Time.deltaTime;
 
         //boll.transform.position = boll.transform.position + new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime); 
 
         //Fysiskt korrekt (inkluderar acceleration i formeln för positionsändring i Y-led.)
-        transform.position += new Vector3(vx * dt, vy * dt + 0.5f * (gravitation * dt * dt));
+        transform.position += new Vector3(vx * dt, vy * dt );
     }
 
     public void StartPressed()
@@ -75,6 +74,9 @@ public class A2Ball : MonoBehaviour
         vinkel = float.Parse(inputVinkel.text);
         transform.position = new Vector3(position.x, position.y);
         timeStart = Time.realtimeSinceStartup;
+
+        vx = startHastighet * (Mathf.Cos(Mathf.Deg2Rad * vinkel));
+        vy = startHastighet * (Mathf.Sin(Mathf.Deg2Rad * vinkel));
     }
 
     public void ResetPressed()
@@ -92,17 +94,17 @@ public class A2Ball : MonoBehaviour
         switch (wallpos)
         {
             case 1:
-                ydir *= -1;
+                vy *= -1;
                 break;
             case 2:
-                ydir *= -1;
+                vy *= -1;
                 break;
             case 3:
-                xdir *= -1;
+                vx *= -1;
                 break;
             case 4:
                 Debug.Log("x");
-                xdir *= -1;
+                vx *= -1;
                 break;
             default:
                 return;
