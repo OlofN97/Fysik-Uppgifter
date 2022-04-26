@@ -28,10 +28,7 @@ public class A2Ball : MonoBehaviour
     private float xdir, ydir;
 
     void Start()
-    {
-        
-
-
+    {      
         ballActive = false;
         gravitation = -9.82f;
         timeStart = 0;
@@ -57,6 +54,7 @@ public class A2Ball : MonoBehaviour
         //vy = (startHastighet * Mathf.Sin(Mathf.Deg2Rad * vinkel) + gravitation * t)*ydir;
         //vx *= xdir;
         //vy *= ydir;
+
         vy += gravitation * Time.deltaTime;
 
         //boll.transform.position = boll.transform.position + new Vector3(Vx * Time.deltaTime, Vy * Time.deltaTime); 
@@ -109,5 +107,9 @@ public class A2Ball : MonoBehaviour
             default:
                 return;
         }
+
+        float rec = w.checkRestitutionCoefficient();
+        vy *= rec;
+        vx *= rec;
     }
 }

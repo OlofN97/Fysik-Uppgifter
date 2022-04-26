@@ -25,4 +25,9 @@ public class Wall : MonoBehaviour
                 return 0;
         }
     }
+
+    public float checkRestitutionCoefficient()
+    {
+        return restitutionCoefficient;
+    }
 }
