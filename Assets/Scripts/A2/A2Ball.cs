@@ -42,7 +42,7 @@ public class A2Ball : MonoBehaviour
         if (ballActive)
         {
             UpdatePosition();
-            //UpdateUi();
+            UpdateUi();
         }
     }
 
@@ -81,6 +81,12 @@ public class A2Ball : MonoBehaviour
     {
         ballActive = false;
         transform.position = Vector3.zero;
+        vx = 0;
+        vy = 0;
+        textHastighetX.text = "Hastighet i X led: 0 m/s";
+        textHastighetY.text = "Hastighet i Y led: 0 m/s";
+        textXPosition.text = "X: 0";
+        textYPosition.text = "Y: 0";
 
     }
 
@@ -111,5 +117,13 @@ public class A2Ball : MonoBehaviour
         float rec = w.checkRestitutionCoefficient();
         vy *= rec;
         vx *= rec;
+    }
+
+    private void UpdateUi()
+    {
+        textHastighetX.text = "Hastighet i X led: " + ((int)Mathf.Abs(vx)).ToString() + " m/s";
+        textHastighetY.text = "Hastighet i Y led: " + ((int)Mathf.Abs(vy)).ToString() + " m/s";
+        textXPosition.text = "X: " + ((int)boll.transform.position.x).ToString();
+        textYPosition.text = "Y: " + ((int)boll.transform.position.y).ToString();
     }
 }
